@@ -21,10 +21,10 @@ userAgent: Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070
 #List of sites
 connection:
   sites:
-    - url: http://www.playback.ru
-      name: PlayBack.ru
+#    - url: http://www.playback.ru
+#      name: PlayBack.ru
     - url: https://nikoartgallery.com
       name: Креативное пространство и галерея Н.Б.Никогосяна
-    - url: https://www.svetlovka.ru
-      name: Светловка
+#    - url: https://www.svetlovka.ru
+#      name: Светловка
 
