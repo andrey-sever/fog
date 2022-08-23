@@ -38,12 +38,17 @@ public class SaveLinks extends RecursiveAction {
                 ForkJoinTask.getPool() == null ? 0 : ForkJoinTask.getPool().getQueuedSubmissionCount());
 
         if (WaitStop.getStop()) {
+
             ForkJoinPool pool = ForkJoinTask.getPool();
+
             if (pool != null) {
                 pool.shutdownNow();
             }
+
         } else {
+
             if (uri != null) {
+
                 if (!ViewedLinks.containsUrl(uri.toLowerCase())) {
                     getDataFromLink();
                 }
@@ -52,42 +57,56 @@ public class SaveLinks extends RecursiveAction {
     }
 
     private void start(List<SaveLinks> startList) {
+
         List<SaveLinks> tasks = new ArrayList<>();
 
         for (SaveLinks saveLinks : startList) {
             tasks.add(new SaveLinks(saveLinks.uri, saveLinks.siteUrl, saveLinks.siteId));
         }
+
         ForkJoinTask.invokeAll(tasks);
     }
 
     private List<SaveLinks> createSubtask(HashSet<String> listLink) {
+
         List<SaveLinks> tasks = new ArrayList<>();
 
         for (String link : listLink) {
             tasks.add(new SaveLinks(link, siteUrl, siteId));
         }
+
         return tasks;
     }
 
     private void getDataFromLink() {
+
         Document doc = null;
+
         int responseStatus = 0;
+
         String content = "";
 
         GeneralMethods.sleep(Intervals.getSleep(uri));
 
         ConnectUrl docStatus = ConnectUrl.buildConnectUrl().getConnectUrl(uri);
+
         doc = docStatus.getDoc();
+
         responseStatus = docStatus.getResponseStatus();
 
         if (responseStatus == 0) {
+
             responseStatus = doc.connection().response().statusCode();
+
             content = doc.toString();
         }
 
         writeLink(responseStatus, content);
+
         if (content != "") {
+
             HashSet<String> listCurrent = LinkProcessing.getLinks(doc, siteUrl);
+
             if (!listCurrent.isEmpty()) {
                 ForkJoinTask.invokeAll(createSubtask(listCurrent));
             }
@@ -95,16 +114,24 @@ public class SaveLinks extends RecursiveAction {
     }
 
     private void writeLink(int code, String content) {
+
         String curPath = GeneralMethods.getUrn(uri);
 
         synchronized (currentPagePackageRecords) {
+
             if (currentPagePackageRecords.getCount() >= PACKAGE_SIZE) {
+
                 IndexingBuilder.savePackageRecords(currentPagePackageRecords.getRecords());
+
                 currentPagePackageRecords.newRecords();
             }
+
             if (!ViewedLinks.containsUrl(uri.toLowerCase())) {
+
                 Page newPage = new Page(siteId, curPath, code, content);
+
                 currentPagePackageRecords.addPage(newPage);
+
                 ViewedLinks.addUrl(uri.toLowerCase());
             }
         }

@@ -35,22 +35,28 @@ public class PageOneBuilder {
         WaitStop.newWaitStop();
 
         createRecordPage();
+
         fillLemmaRawBuilder();
+
         fillIndex();
     }
 
     public Object errorsFound() {
+
         if (docStatus.getDoc() == null) {
             return ErrorList.pageNotFound();
         }
 
         Optional<Site> optionalSite = dataService.getSiteRepository().findFirstByUrl(site);
+
         if (optionalSite.isEmpty() || optionalSite.get().getStatus() == SiteStatus.FAILED) {
             return  ErrorList.pageNotList();
         }
 
         this.siteId = dataService.getSiteRepository().findSiteIdByUrl(site);
+
         reindex = true;
+
         return new ResultTrue();
     }
 
@@ -59,9 +65,13 @@ public class PageOneBuilder {
     }
 
     private void removePageFromIndex() {
+
         int idPage = getPageId();
+
         dataService.getPageRepository().deleteById(idPage);
+
         dataService.getIndexRepository().deleteAllById(idPage);
+
         dataService.getLemmaRawRepository().deleteBySiteIdAndPath(siteId, urn);
     }
 
@@ -75,11 +85,17 @@ public class PageOneBuilder {
     }
 
     private void fillLemmaRawBuilder() {
+
         int pageId = getPageId();
+
         Thread thread = new Thread(new LemmaRawBuilder(pageId, pageId, dataService));
+
         thread.start();
+
         try {
+
             thread.join();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

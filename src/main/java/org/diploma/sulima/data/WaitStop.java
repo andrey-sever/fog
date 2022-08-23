@@ -24,7 +24,9 @@ public class WaitStop {
     }
 
     public static void newWaitStop() {
+
         stop = new AtomicBoolean(false);
+
         stopped = new AtomicBoolean(false);
     }
 }

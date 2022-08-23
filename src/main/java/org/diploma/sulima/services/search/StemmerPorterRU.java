@@ -20,23 +20,41 @@ public class StemmerPorterRU {
     private static final Pattern NN = Pattern.compile("нн$");
 
     public static String stem(String word) {
+
         word = word.toLowerCase();
+
         word = word.replace('ё', 'е');
+
         Matcher m = RVRE.matcher(word);
+
         if (m.matches()) {
+
             String pre = m.group(1);
+
             String rv = m.group(2);
+
             String temp = PERFECTIVEGROUND.matcher(rv).replaceFirst("");
+
             if (temp.equals(rv)) {
+
                 rv = REFLEXIVE.matcher(rv).replaceFirst("");
+
                 temp = ADJECTIVE.matcher(rv).replaceFirst("");
+
                 if (!temp.equals(rv)) {
+
                     rv = temp;
+
                     rv = PARTICIPLE.matcher(rv).replaceFirst("");
+
                 } else {
+
                     temp = VERB.matcher(rv).replaceFirst("");
+
                     if (temp.equals(rv)) {
+
                         rv = NOUN.matcher(rv).replaceFirst("");
+
                     } else {
                         rv = temp;
                     }
@@ -53,12 +71,17 @@ public class StemmerPorterRU {
             }
 
             temp = P.matcher(rv).replaceFirst("");
+
             if (temp.equals(rv)) {
+
                 rv = SUPERLATIVE.matcher(rv).replaceFirst("");
+
                 rv = NN.matcher(rv).replaceFirst("н");
-            }else{
+
+            } else {
                 rv = temp;
             }
+
             word = pre + rv;
 
         }

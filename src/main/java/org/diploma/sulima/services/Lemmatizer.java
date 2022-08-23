@@ -29,11 +29,15 @@ public class Lemmatizer {
         if (text.isEmpty()) return listLemma;
 
         String[] temp = text.split(" ");
+
         for (String word : temp) {
+
             word = word.toLowerCase();
+
             if (!wordIsValid(word) || word.length() == 1) continue;
 
             List<String> variantsLemma = luceneMorphology.getNormalForms(word);
+
             addWordToList(variantsLemma, word);
         }
 
@@ -41,32 +45,45 @@ public class Lemmatizer {
     }
 
     private String textCorrection(String text) {
+
         String textCorr = text.replaceAll("[-]", " ");
+
         textCorr = textCorr.replaceAll("[^а-я^А-Я^ ]", " "); //Пока без английского/
+
         textCorr = textCorr.replaceAll("[\\s]+", " ").trim();
+
         return textCorr;
     }
 
     private Boolean wordIsValid(String word) {
+
         String wordExceptions = luceneMorphology.getMorphInfo(word).get(0);
+
         for (String part : PARTS_SPEECH_EXCEPTIONS) {
             if (wordExceptions.contains(part)) return false;
         }
+
         return true;
     }
 
     private void addWordToList(List<String> variantsLemma, String word) {
+
         String wordLemma;
 
         if (variantsLemma.size() == 1) {
+
             wordLemma = variantsLemma.get(0);
+
         } else {
+
             if (variantsLemma.contains(word)) {
                 wordLemma = word;
+
             } else {
                 wordLemma = variantsLemma.get(0);
             }
         }
+
         listLemma.add(wordLemma);
     }
 }
