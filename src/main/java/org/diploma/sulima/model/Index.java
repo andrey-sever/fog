@@ -1,4 +1,4 @@
-package org.diploma.sulima.data.entity;
+package org.diploma.sulima.model;
 
 import lombok.Data;
 

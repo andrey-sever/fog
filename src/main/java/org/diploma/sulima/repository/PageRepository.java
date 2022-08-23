@@ -1,6 +1,6 @@
 package org.diploma.sulima.repository;
 
-import org.diploma.sulima.data.entity.Page;
+import org.diploma.sulima.model.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,5 +1,6 @@
 package org.diploma.sulima.services.search;
 
+import org.diploma.sulima.model.FoundPage;
 import org.diploma.sulima.data.DataService;
 
 import java.util.HashMap;

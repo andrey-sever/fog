@@ -1,6 +1,7 @@
 package org.diploma.sulima.services.search;
 
 import lombok.Data;
+import org.diploma.sulima.model.FoundPage;
 
 import java.util.List;
 

@@ -1,9 +1,10 @@
 package org.diploma.sulima.services.search;
 
+import org.diploma.sulima.model.FoundPage;
 import org.diploma.sulima.data.DataService;
 import org.diploma.sulima.services.Lemmatizer;
-import org.diploma.sulima.data.entity.Lemma;
-import org.diploma.sulima.data.entity.Page;
+import org.diploma.sulima.model.Lemma;
+import org.diploma.sulima.model.Page;
 import org.jsoup.Jsoup;
 
 import java.util.*;

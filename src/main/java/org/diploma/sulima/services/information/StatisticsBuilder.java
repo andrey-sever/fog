@@ -2,7 +2,7 @@ package org.diploma.sulima.services.information;
 
 import org.diploma.sulima.data.DataService;
 import org.diploma.sulima.data.SiteStatus;
-import org.diploma.sulima.data.entity.Site;
+import org.diploma.sulima.model.Site;
 
 import java.util.ArrayList;
 import java.util.Date;

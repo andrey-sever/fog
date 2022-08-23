@@ -1,7 +1,7 @@
 package org.diploma.sulima.data.configuration;
 
 import lombok.Data;
-import org.diploma.sulima.data.entity.Site;
+import org.diploma.sulima.model.Site;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

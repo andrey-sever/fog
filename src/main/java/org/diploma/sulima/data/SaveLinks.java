@@ -1,6 +1,6 @@
 package org.diploma.sulima.data;
 
-import org.diploma.sulima.data.entity.Page;
+import org.diploma.sulima.model.Page;
 
 import org.diploma.sulima.services.ConnectUrl;
 import org.diploma.sulima.services.GeneralMethods;

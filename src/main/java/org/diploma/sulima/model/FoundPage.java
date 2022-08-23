@@ -1,4 +1,4 @@
-package org.diploma.sulima.services.search;
+package org.diploma.sulima.model;
 
 import lombok.Data;
 

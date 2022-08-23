@@ -1,6 +1,6 @@
 package org.diploma.sulima.repository;
 
-import org.diploma.sulima.data.entity.LemmaRaw;
+import org.diploma.sulima.model.LemmaRaw;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

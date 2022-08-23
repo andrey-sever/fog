@@ -1,6 +1,6 @@
 package org.diploma.sulima.data;
 
-import org.diploma.sulima.data.entity.Page;
+import org.diploma.sulima.model.Page;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

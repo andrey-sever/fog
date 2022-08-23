@@ -1,7 +1,7 @@
 package org.diploma.sulima.data;
 
-import org.diploma.sulima.data.entity.LemmaRaw;
-import org.diploma.sulima.data.entity.Page;
+import org.diploma.sulima.model.LemmaRaw;
+import org.diploma.sulima.model.Page;
 import org.diploma.sulima.repository.LemmaRawRepository;
 import org.diploma.sulima.repository.PageRepository;
 import org.diploma.sulima.services.IndexingBuilder;
