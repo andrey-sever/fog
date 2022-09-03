@@ -1,7 +1,3 @@
-#basic settings
-server:
-  servlet:
-    context-path: /admin
 
 #DB
 spring.datasource:
