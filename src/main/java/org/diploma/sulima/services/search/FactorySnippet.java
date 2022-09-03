@@ -61,6 +61,13 @@ public class FactorySnippet {
 
             int foundPosition = textLowerCase.indexOf(word);
 
+            if (foundPosition > 0) {
+
+                String beforeSymbol = removePunctuationMarks(textLowerCase.substring(foundPosition - 1, foundPosition));
+
+                if (!beforeSymbol.contains(" ")) foundPosition = -1;
+            }
+
             if (foundPosition == -1) continue;
 
             listLines.add(buildLine(foundPosition));
@@ -148,7 +155,7 @@ public class FactorySnippet {
     }
 
     private static String removePunctuationMarks(String line) {
-        return line.replaceAll("[.,?!;:]", " ");
+        return line.replaceAll("[.,?!;:«]", " ");
     }
 
     private static String wholeWord(int start, String inText) {
