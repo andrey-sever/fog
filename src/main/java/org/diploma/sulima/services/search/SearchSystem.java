@@ -18,6 +18,7 @@ public class SearchSystem {
     private String site;
     private int offset;
     private int limit;
+    private int countQuery;
 
     private int siteId = 0;
     private List<Integer> listLemmaId;
@@ -44,15 +45,15 @@ public class SearchSystem {
 
         listLemmaId = new ArrayList<>();
 
-        Lemma tempLemma;
-
-        long totalPages = getTotalPages();
-
         Lemmatizer lemmatizer = new Lemmatizer();
 
         List<String> listLemma = lemmatizer.getListLemma(query);
 
+        countQuery = listLemma.size();
+
         int counterId = 0;
+
+        Lemma tempLemma;
 
         for (String word : listLemma) {
 
@@ -65,11 +66,27 @@ public class SearchSystem {
             listCleared.add(tempLemma);
         }
 
-        List<Lemma> finalList = frequentlyOccurring(listCleared, totalPages);
+        return lemmaSortedBuilder(listCleared);
+    }
+
+    private List<Lemma> lemmaSortedBuilder(List<Lemma> finalList) {
 
         Collections.sort(finalList);
 
         if (site == null) finalList = revealGeneralLemma(finalList);
+
+        if (site == null) {
+
+            correctionFullRequestBySites(finalList);
+
+        } else {
+
+            finalList = correctionFullRequest(finalList, siteId);
+        }
+
+        long totalPages = getTotalPages();
+
+        finalList = frequentlyOccurring(finalList, totalPages);
 
         for (Lemma lemma : finalList) listLemmaId.add(lemma.getId());
 
@@ -127,21 +144,54 @@ public class SearchSystem {
         return listOut;
     }
 
+    private List<Lemma> correctionFullRequestBySites(List<Lemma> finalList) {
+
+        for (Integer siteId : dataService.getSiteRepository().getAllId()) {
+
+            finalList = correctionFullRequest(finalList, siteId);
+        }
+
+        return finalList;
+    }
+
+    private List<Lemma> correctionFullRequest(List<Lemma> finalList, int siteId) {
+
+        List<Lemma> deleteElement = listDeleteElement(finalList, siteId);
+
+        if (deleteElement.size() != countQuery) finalList.removeAll(deleteElement);
+
+        return finalList;
+    }
+
+    private List<Lemma> listDeleteElement(List<Lemma> finalList, int siteId) {
+
+        List<Lemma> deleteElement = new ArrayList<>();
+
+        for (Lemma lemma : finalList) {
+
+            if (lemma.getSiteId() == siteId) deleteElement.add(lemma);
+        }
+
+        return deleteElement;
+    }
+
     private List<Lemma> frequentlyOccurring(List<Lemma> listCleared, long totalPages) {
 
         if (listCleared.size() == 0) return listCleared;
 
-        List<Lemma> listOut = new ArrayList<>();
-
-        Lemma firstElement = listCleared.get(0);
+        List<Lemma> listDelete = null;
 
         for (Lemma element : listCleared) {
-            if (element.getFrequency() < totalPages * REPETITION_RATE) listOut.add(element);
+
+            if (element.getFrequency() < totalPages * REPETITION_RATE) {
+
+                listDelete = listDeleteElement(listCleared, element.getSiteId());
+            }
         }
 
-        if (listOut.size() == 0) listOut.add(firstElement);
+        if (listCleared.size() > listDelete.size() && listDelete.size() != 0) listCleared.removeAll(listDelete);
 
-        return listOut;
+        return listCleared;
     }
 
     private List<Integer> listPageIdByQuery(List<Lemma> sortedLemmaList) {
