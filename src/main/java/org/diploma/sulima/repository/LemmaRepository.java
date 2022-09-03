@@ -29,16 +29,5 @@ public interface LemmaRepository extends JpaRepository<Lemma, Integer> {
             , nativeQuery = true)
     Lemma findLemmaAndSiteId(String lemma, int siteID);
 
-    @Query(value = "SELECT " +
-                        "?2 AS id, " +
-                        "0 AS site_id, " +
-                        "one.lemma, " +
-                        "SUM(one.frequency) AS frequency " +
-                    "FROM (SELECT * FROM lemma WHERE lemma = ?1) AS one " +
-                    "GROUP BY " +
-                        "one.lemma"
-            , nativeQuery = true)
-    Lemma findGeneralLemma(String lemma, int counterId);
-
     List<Lemma> findByLemma(String lemma);
 }
