@@ -33,9 +33,7 @@ public class SearchSystem {
     }
 
     public List<FoundPage> getListObject() {
-
         if (offset == 0) createFoundPage();
-
         return portionFoundPage();
     }
 
@@ -44,25 +42,17 @@ public class SearchSystem {
         List<Lemma> listCleared = new ArrayList<>();
 
         Lemmatizer lemmatizer = new Lemmatizer();
-
         List<String> listLemma = lemmatizer.getListLemma(query);
-
         countQuery = listLemma.size();
-
         for (String lemma : listLemma) {
 
             if (site == null) {
-
                 listCleared.addAll(allLemmaByName(lemma));
-
             } else {
-
                 Lemma tempLemma = oneLemmaByNameAndSiteId(lemma, siteId);
-
                 if(tempLemma != null) listCleared.add(tempLemma);
             }
         }
-
         return lemmaSortedBuilder(listCleared);
     }
 
@@ -71,43 +61,33 @@ public class SearchSystem {
         listLemmaId = new ArrayList<>();
 
         if (site == null) {
-
             correctionFullRequestAllSites(finalList);
-
         } else {
-
             finalList = correctionFullRequest(finalList, siteId);
         }
 
         finalList = frequentlyOccurring(finalList);
-
         for (Lemma lemma : finalList) listLemmaId.add(lemma.getId());
 
         return finalList;
     }
 
     private long getTotalPages(int siteId) {
-
         return dataService.getPageRepository().countBySiteId(siteId);
-
     }
 
 
     private List<Lemma> allLemmaByName(String lemma) {
-
         return dataService.getLemmaRepository().findByLemma(lemma);
     }
 
     private Lemma oneLemmaByNameAndSiteId(String lemma, int siteId) {
-
         return dataService.getLemmaRepository().findLemmaAndSiteId(lemma, siteId);
-
     }
 
     private List<Lemma> correctionFullRequestAllSites(List<Lemma> finalList) {
 
         for (Integer siteId : dataService.getSiteRepository().getAllId()) {
-
             finalList = correctionFullRequest(finalList, siteId);
         }
 
@@ -119,7 +99,6 @@ public class SearchSystem {
         List<Lemma> deleteElement = listDeleteElement(finalList, siteId);
 
         if (deleteElement.size() != countQuery) finalList.removeAll(deleteElement);
-
         Collections.sort(finalList);
 
         return finalList;
@@ -130,7 +109,6 @@ public class SearchSystem {
         List<Lemma> deleteElement = new ArrayList<>();
 
         for (Lemma lemma : finalList) {
-
             if (lemma.getSiteId() == siteId) deleteElement.add(lemma);
         }
 
@@ -140,13 +118,9 @@ public class SearchSystem {
     private List<Lemma> frequentlyOccurring(List<Lemma> listCleared) {
 
         if (listCleared.size() == 0) return listCleared;
-
         if (site == null) {
-
             listCleared = frequentLemmaAllSite(listCleared);
-
         } else {
-
             listCleared = frequentLemmaOneSite(listCleared, siteId);
         }
 
@@ -156,19 +130,14 @@ public class SearchSystem {
     private List<Lemma> frequentLemmaOneSite(List<Lemma> listCleared, int siteId) {
 
         long totalPages = getTotalPages(siteId);
-
         List<Lemma> listDelete = new ArrayList<>();
 
         for (Lemma element : listCleared) {
-
             if (element.getSiteId() == siteId && element.getFrequency() < totalPages * REPETITION_RATE) {
-
                 listDelete = listDeleteElement(listCleared, element.getSiteId());
-
                 break;
             }
         }
-
         if (countQuery > listDelete.size() && listDelete.size() != 0) listCleared.removeAll(listDelete);
 
         return listCleared;
@@ -186,21 +155,15 @@ public class SearchSystem {
     private List<Integer> listPageIdByQuery(List<Lemma> sortedLemmaList) {
 
         List<Integer> nextListPageId;
-
         List<Integer> listPageId = new ArrayList<>();
 
         for (Lemma lemma : sortedLemmaList) {
 
             int currentLemmaId = lemma.getId();
-
             int currentSiteId = lemma.getSiteId();
-
             if (listPageId.isEmpty()) {
-
                 listPageId = getListPageId(currentLemmaId, currentSiteId);
-
                 continue;
-
             } else {
                 nextListPageId = getListPageId(currentLemmaId, currentSiteId);
             }
@@ -220,17 +183,13 @@ public class SearchSystem {
     private void createFoundPage() {
 
         List<Lemma> allLemmasSorted = queryToListLemmaSorted();
-
         List<Integer> listPageId;
 
         if (site == null) {
-
             listPageId = getAllListPageId(allLemmasSorted);
-
         } else {
             listPageId = listPageIdByQuery(allLemmasSorted);
         }
-
         dataService.getIndexRepository().fillInTableFoundPage(listPageId, listLemmaId);
     }
 
@@ -241,7 +200,6 @@ public class SearchSystem {
         for (Integer siteId : dataService.getSiteRepository().getAllId()) {
 
             List<Lemma> oneSiteLemmaSorted = new ArrayList<>();
-
             for (Lemma lemmaSorted : allLemmasSorted) {
                 if (siteId == lemmaSorted.getSiteId()) oneSiteLemmaSorted.add(lemmaSorted);
             }
@@ -257,13 +215,10 @@ public class SearchSystem {
     public List<FoundPage> portionFoundPage() {
 
         List<FoundPage> portionOut = dataService.getFoundPageRepository().findPortionFoundPages(limit, offset);
-
         for (FoundPage foundPage : portionOut) {
 
             Map tittleSnippet = getTitleSnippet(foundPage.getPageId());
-
             foundPage.setTitle(tittleSnippet.get("title").toString());
-
             foundPage.setSnippet(tittleSnippet.get("snippet").toString());
         }
 
@@ -275,17 +230,11 @@ public class SearchSystem {
         HashMap outMap = new HashMap<>();
 
         Page pageCurrent = dataService.getPageRepository().getById(pageId);
-
         String contentCurrent = pageCurrent.getContent();
-
         String title = Jsoup.parse(contentCurrent).title();
-
         String allText = Jsoup.parse(contentCurrent).text();
-
         String snippet = FactorySnippet.getSnippet(query, allText);
-
         outMap.put("title", title);
-
         outMap.put("snippet", snippet);
 
         return outMap;

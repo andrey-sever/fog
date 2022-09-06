@@ -25,19 +25,14 @@ public class Lemmatizer {
     public List<String> getListLemma(String text) {
 
         text = textCorrection(text);
-
         if (text.isEmpty()) return listLemma;
-
         String[] temp = text.split(" ");
 
         for (String word : temp) {
 
             word = word.toLowerCase();
-
             if (!wordIsValid(word) || word.length() == 1) continue;
-
             List<String> variantsLemma = luceneMorphology.getNormalForms(word);
-
             addWordToList(variantsLemma, word);
         }
 
@@ -47,9 +42,7 @@ public class Lemmatizer {
     private String textCorrection(String text) {
 
         String textCorr = text.replaceAll("[-]", " ");
-
         textCorr = textCorr.replaceAll("[^а-я^А-Я^ ]", " "); //Пока без английского/
-
         textCorr = textCorr.replaceAll("[\\s]+", " ").trim();
 
         return textCorr;
@@ -71,14 +64,10 @@ public class Lemmatizer {
         String wordLemma;
 
         if (variantsLemma.size() == 1) {
-
             wordLemma = variantsLemma.get(0);
-
         } else {
-
             if (variantsLemma.contains(word)) {
                 wordLemma = word;
-
             } else {
                 wordLemma = variantsLemma.get(0);
             }

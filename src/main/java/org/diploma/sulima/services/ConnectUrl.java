@@ -25,20 +25,15 @@ public class ConnectUrl {
     public ConnectUrl getConnectUrl(String url) {
 
         try {
-
             doc = Jsoup.connect(url)
                     .userAgent(userAgent)
                     .referrer("http://www.google.com")
                     .get();
-
         } catch (HttpStatusException httpEx) {
-
             responseStatus = httpEx.getStatusCode();
-
         } catch (IOException ex) {
             responseStatus = 404;
         }
-
         return this;
     }
 

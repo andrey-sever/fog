@@ -36,9 +36,7 @@ public class Page {
     public boolean equals(Object o) {
 
         if (this == o) return true;
-
         if (o == null || getClass() != o.getClass()) return false;
-
         Page page = (Page) o;
 
         return siteId == page.siteId && Objects.equals(path, page.path);

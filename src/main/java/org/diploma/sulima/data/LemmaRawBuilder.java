@@ -52,23 +52,14 @@ public class LemmaRawBuilder extends Thread {
             System.out.printf("%s%n", Thread.currentThread().getName()); // TODO: 20.07.2022 Для проверки. Потом удалить
 
             Page page = pageRepository.getById(i);
-
             siteId = page.getSiteId();
-
             path = page.getPath();
-
             String content = page.getContent();
-
             ratioRank = WEIGHT_TITLE;
-
             processText(Jsoup.parse(content).title());
-
             ratioRank = WEIGHT_BODY;
-
             processText(Jsoup.parse(content).body().text());
-
             if (localListLemmaRaw.size() >= PACKAGE_SIZE) recordingPackage();
-
         }
 
         if (localListLemmaRaw.size() != 0) recordingPackage();
@@ -77,13 +68,9 @@ public class LemmaRawBuilder extends Thread {
     private void processText(String text) {
 
         List<String> lemmaList;
-
         if (text.isEmpty()) return;
-
         Lemmatizer lemmatizer = new Lemmatizer();
-
         lemmaList = lemmatizer.getListLemma(text);
-
         for (String word : lemmaList) {
             localListLemmaRaw.add(new LemmaRaw(siteId, path, word, ratioRank));
         }
@@ -92,13 +79,10 @@ public class LemmaRawBuilder extends Thread {
     private void recordingPackage() {
 
         try {
-
             lemmaRawRepository.saveAll(localListLemmaRaw);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         localListLemmaRaw = new ArrayList<>();
     }
 }

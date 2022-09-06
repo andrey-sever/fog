@@ -13,9 +13,7 @@ public class Intervals {
     public static long getSleep(String uri) {
 
         long timePassed = 0;
-
         site = GeneralMethods.getSiteFromUri(uri);
-
         timePassed = getTimeSetNewTime();
 
         return timePassed >= requestDelay ? 0 : requestDelay - timePassed;
@@ -24,13 +22,11 @@ public class Intervals {
     private static long getTimeSetNewTime() {
 
         long timeBegin = 0;
-
         long timeEnd = System.currentTimeMillis();
 
         if (siteTime.containsKey(site)) {
             timeBegin = siteTime.get(site);
         }
-
         siteTime.put(site, timeEnd);
 
         return timeEnd - timeBegin;

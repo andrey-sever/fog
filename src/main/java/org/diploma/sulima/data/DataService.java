@@ -44,17 +44,14 @@ public class DataService {
     public Object getResultQuery(HashMap parameters) {
 
         if (parameters.get("query") == "") return ErrorList.emptyRequest();
-
         if (parameters.get("site") == null && siteRepository.allIndexed() == 0) return ErrorList.notAllSitesInTheIndex();
-
         if (parameters.get("site") != null && siteRepository.currentSiteIndexed(parameters.get("site").toString()) == 0)
             return ErrorList.currentSiteNotIndexed();
 
         parameters.put("dataService", this);
-
         FoundOutput result = SearchBuilder.processingSearch(parameters);
-
         if (!result.isResult()) return ErrorList.noMatchesFound();
+
         return result;
     }
 
@@ -65,7 +62,6 @@ public class DataService {
     public PageOneBuilder addPageIndexResponse(String uri) {
 
         PageOneBuilder newIndex = new PageOneBuilder(userAgent, uri, this);
-
         return newIndex;
     }
 
